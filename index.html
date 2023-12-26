@@ -78,9 +78,7 @@
     <tbody>
       {% for mat in matiere_premiere %}
       <tr align="center" >
-        <td> 
-        {{ mat.matiere_NAME }}
-        </td>
+        <td><a href="{% url 'select_product' mat.matiere_ID 'matiere_premiere' %}" style="text-decoration: none;">{{ mat.matiere_NAME }}</a></td>
       </tr>
       {% endfor %}
     </tbody>
@@ -88,6 +86,7 @@
 
   <br>
   <h1 style="margin-left: 20px;"> la liste des clients fidele : </h1>
+  <a href="{% url 'list_produit'%}"></a>
   <table  class="table table-hover table table-bordered border-primary" style="width: 98%; margin: 10px;">
     <thead>
         <tr align="center">
@@ -98,7 +97,7 @@
       {% for cl in client %}
       <tr align="center" >
         <td> 
-        {{ cl.client_NAME }}
+          <a href="{% url 'select_product' cl.client_ID 'client' %}" style="text-decoration: none;">{{ cl.client_NAME }}</a>
         </td>
       </tr>
       {% endfor %}
@@ -107,6 +106,7 @@
 
   <br>
   <h1 style="margin-left: 20px;"> la liste des fournisseurs : </h1>
+  <a href="{% url 'list_produit'%}"></a>
   <table  class="table table-hover table table-bordered border-primary" style="width: 98%; margin: 10px;">
     <thead>
         <tr align="center">
@@ -116,8 +116,8 @@
     <tbody>
       {% for fr in fournisseur %}
       <tr align="center" >
-        <td>  
-        {{ fr.fournisseur_NAME }}
+        <td>
+          <a href="{% url 'select_product' fr.fournisseur_ID 'fournisseur' %}" style="text-decoration: none;">{{ fr.fournisseur_NAME }}</a>  
         </td>
       </tr>
       {% endfor %}
@@ -136,8 +136,7 @@
     <tbody>
       {% for cent in centre %}
       <tr align="center" >
-          
-          <td><a href="{% url 'select_product' cent.centre_ID 'centre' %}" style="text-decoration: none;">{{ cent.centre_NAME }}</a></td>       
+        <td><a href="{% url 'select_product' cent.centre_ID 'centre' %}" style="text-decoration: none;">{{ cent.centre_NAME }}</a></td>       
       </tr>
       {% endfor %}
     </tbody>
@@ -145,6 +144,7 @@
 
   <br>
   <h1 style="margin-left: 20px;"> la liste des employes : </h1>
+  <a href="{% url 'list_produit'%}"></a>
   <table  class="table table-hover table table-bordered border-primary" style="width: 98%; margin: 10px;">
     <thead>
         <tr align="center">
@@ -155,7 +155,7 @@
       {% for emp in team %}
       <tr align="center" >
         <td> 
-        {{ emp.employer_NOM }}
+          <a href="{% url 'select_product' emp.employer_CODE 'team' %}" style="text-decoration: none;">{{ emp.employer_NOM }}</a>
         </td>
       </tr>
       {% endfor %}
