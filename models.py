@@ -1,9 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
-
-from django.db import models
 
 # Create your models here.
 
@@ -26,7 +22,14 @@ class centre_pv(models.Model) :
     centre_MAIL = models.EmailField()
     recette = models.FloatField()
     superior = models.ForeignKey(main_store , on_delete = models.CASCADE)
+    
     #superior -> main_store_ID
+
+
+class pvs(models.Model) :
+    pv_val = models.TextField()
+    concerned_center = models.ForeignKey(centre_pv , on_delete = models.CASCADE)
+
 
 class client(models.Model) :
     client_ID = models.AutoField(primary_key = True)
@@ -92,3 +95,18 @@ class R3(models.Model):
     client_centre = models.ForeignKey(client, on_delete=models.CASCADE)
     centre_pnv = models.ForeignKey(centre_pv, on_delete=models.CASCADE)
     #place where client bought 
+
+
+class vente(models.Model):
+    time = models.DateField()
+    client_achter = models.ForeignKey(client , on_delete = models.CASCADE )
+    produit = models.ForeignKey(produit, on_delete = models.CASCADE)
+    qte = models.IntegerField()
+    prix = models.FloatField()
+    payement_faciliter = models.BooleanField()
+    rest_total = models.FloatField(default = 0.0)
+
+class emprunt(models.Model):
+    employe = models.ForeignKey(team, on_delete=models.CASCADE)
+    date_emprunt = models.DateField()
+    somme = models.FloatField()
