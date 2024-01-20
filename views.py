@@ -1,7 +1,7 @@
-from django.shortcuts import redirect, render
-#from . import models
-from .models import centre_pv, fournisseur, produit, client, team, matiere_premiere
-from .forms import centerform, clientform, fournisseurform, matiereform, productform, teamform
+from django.http import HttpResponse
+from django.shortcuts import  get_object_or_404, redirect, render
+from .models import centre_pv, fournisseur, produit, client, pvs, team, matiere_premiere , vente
+from .forms import  PointageForm, centerform, clientform, empruntform, fournisseurform, matiereform, productform, pvform, teamform , pvs, venteform
 
 
 
@@ -40,7 +40,9 @@ def select(request , id , type) :
 
     if type == 'centre' :
         centres = centre_pv.objects.get(centre_ID = id)
-        types = {'centre' : centres}
+        types = {'centre' : centres }
+
+
 
     if type == 'client' :
         clients = client.objects.get(client_ID = id)
@@ -54,17 +56,13 @@ def select(request , id , type) :
     if type == 'team' :
         employe = team.objects.get(employer_CODE = id)
         types = {'team' : employe}
+        afficher_team(request,id)
 
     if type == 'matiere_premiere' :    
         matiere = matiere_premiere.objects.get(matiere_ID = id)
         types = {'matiere_premiere' : matiere}
 
     return render(request,"select.html",types)
-
-
-    
-    
-
 
 
 def add_product(request,type):
@@ -94,6 +92,21 @@ def add_product(request,type):
                 return render(request, 'add.html', {'form': form, 'message': write})
         else:
             form = centerform()
+            write = "Make sure you have entered all fields."
+            return render(request, 'add.html', {'form': form, 'message': write})
+        return render(request, 'add.html', {'form': form})
+    
+    if type == 'pv' :
+        if request.method == 'POST':
+            form = pvform(request.POST)
+
+            if form.is_valid():
+                form.save()  # Call the save method to save the product
+                form = pvform()  # Create a new empty form
+                write = "centre added, you can add another."
+                return render(request, 'add.html', {'form': form, 'message': write})
+        else:
+            form = pvform()
             write = "Make sure you have entered all fields."
             return render(request, 'add.html', {'form': form, 'message': write})
         return render(request, 'add.html', {'form': form})
@@ -154,8 +167,7 @@ def add_product(request,type):
             write = "Make sure you have entered all fields."
             return render(request, 'add.html', {'form': form, 'message': write})
 
-
-
+       
 def modify_product(request, id , type):
 
     if type == 'produit' :
@@ -274,29 +286,150 @@ def delete_product(request,id,type):
 
 
 def search_product(request):
+
     if request.method == 'POST' :
         search = request.POST['passed']
+        types = {'searched':search}
+
         product = produit.objects.filter(prod_NAME__contains=search)
         if product.exists() :
-            return render(request, 'search.html' , {"searched" : search , 'produits' : product})
-        else:
-            centres = centre_pv.objects.filter(centre_NAME__contains=search)
-            if centres.exists() :
-                return render(request, 'search.html' , {"searched" : search , 'centre' : centres})
-            else:
-                teams = team.objects.filter(employer_NOM__contains=search)
-                if teams.exists() :
-                    return render(request, 'search.html' , {"searched" : search , 'team' : teams})
-                else:
-                    matiers = matiere_premiere.objects.filter(matiere_NAME__contains=search)
-                    if matiers.exists() :
-                        return render(request, 'search.html' , {"searched" : search , 'matiere_premiere' : matiers})
-                    else:
-                        clients = client.objects.filter(client_NAME__contains=search)
-                        if clients.exists() :
-                            return render(request, 'search.html' , {"searched" : search , 'client' : clients})
-                        else:
-                            fournisseurs = fournisseur.objects.filter(fournisseur_NAME__contains=search)
-                            if fournisseurs.exists() :
-                                return render(request, 'search.html' , {"searched" : search , 'fournisseur' : fournisseurs})
+            types.update({'produits' : product })
+    
+        
+        centres = centre_pv.objects.filter(centre_NAME__contains=search)
+        if centres.exists() :
+            types.update({'centre' : centres})
+        
+        teams = team.objects.filter(employer_NOM__contains=search)
+        if teams.exists() :
+            types.update({'team' : teams})
+        
+        matiers = matiere_premiere.objects.filter(matiere_NAME__contains=search)
+        if matiers.exists() :
+            types.update({ 'matiere_premiere' : matiers})
+        
+        clients = client.objects.filter(client_NAME__contains=search)
+        if clients.exists() :
+            types.update({ 'client' : clients})
+        
+        fournisseurs = fournisseur.objects.filter(fournisseur_NAME__contains=search)
+        if fournisseurs.exists() :
+            types.update({'fournisseur' : fournisseurs})
+        
+        if len(types) > 1 :
+            return render(request, 'search.html' , types)
+        
+        msg = 'no search found :('
+        return render(request, 'search.html' , {"searched" : search , "message":msg})
 
+
+
+def details(request,id):
+    pv = pvs.objects.filter(concerned_center__centre_ID=id)
+    return render(request,'details.html',{'pv' : pv , 'id' : id})
+
+
+def add_vente(request):
+
+    if request.method == 'POST':
+        form = venteform(request.POST)
+
+        if form.is_valid():
+
+            prix = form.cleaned_data['prix']
+            qte = form.cleaned_data['qte']
+
+            bill = prix * qte
+
+            if_facilite = form.cleaned_data['payement_faciliter']
+    
+            if if_facilite == True :
+                message1 = "facilite mode is available"
+            else :
+                message1 = "facilite mode isn't available "
+
+            input_value = request.POST.get('combien_regler')
+            reste =float(bill) - float(input_value)
+            message1 = message1 + f"{reste}"
+
+            
+            form.save()  
+
+            
+
+            form = venteform()  
+            write = f"Product added and the total is {bill} DA, you can add another . "
+            message = write + message1
+            return render(request, 'add.html', {'form': form, 'message': message})
+    else:
+        form = venteform()
+        write = "Make sure you have entered all fields."
+        return render(request, 'add.html', {'form': form, 'message': write})
+
+
+def afficher_team(request,id) :
+   
+    employe = team.objects.filter(centre_pnv__centre_ID = id)
+
+    types={
+           "team":employe
+          }
+
+
+    return render(request,"details_employe.html",types)
+
+def select_team(request,id):
+    
+
+    employe = team.objects.get(employer_CODE = id)
+    id_centre = employe.centre_pnv.centre_ID
+
+    types = {'team' : employe,
+             'id':id_centre
+            }
+
+    return render(request,"select_team.html",types)    
+
+
+def pointage(request, id):
+    employe = team.objects.get(employer_CODE = id )
+
+    form = PointageForm(request.POST)
+    if request.method == 'POST':
+       
+
+        if form.is_valid():
+            present = form.cleaned_data['employer_Present']
+            #absent = form.cleaned_data['employer_Absent']
+
+            if present:
+                employe.employer_SALAIRE_JR += 1000
+            elif not present:
+                employe.employer_SALAIRE_JR -= 500
+
+            employe.save()
+            return render(request, 'pointage.html', {'employe': employe, 'form': form})    
+    else:
+        form = PointageForm()
+        return render(request, 'pointage.html', {'employe': employe, 'form': form})
+
+
+def emprunt(request , id):
+    employe = team.objects.get(employer_CODE = id )
+
+    form = empruntform(request.POST)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            
+            total = form.cleaned_data['somme']
+            form.save()
+
+            employe.employer_SALAIRE_JR -= total
+
+            employe.save()
+            msg = "operation effectuer "
+            return render(request, 'emprunt.html', {'employe': employe, 'form': form , 'message':msg})
+    else:
+        form = empruntform()
+        return render(request, 'emprunt.html', {'employe': employe, 'form': form })
