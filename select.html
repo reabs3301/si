@@ -31,7 +31,7 @@
                 <td align="center"> <a href="{% url 'delete' produit.prod_ID 'produit'%}"><input type="submit" value="Delete" class="btn btn-outline-danger"></a></td>
             </tr>
 
-            {{type_obj}}
+            
 
         </tbody>
     </table>
@@ -62,11 +62,10 @@
                 <td align="center"> <a href="{% url 'edit' centre.centre_ID 'centre'%}"><input type="submit" value="Edit" class="btn btn-outline-secondary"></a></td>
                 <td align="center"> <a href="{% url 'delete' centre.centre_ID 'centre'%}"><input type="submit" value="Delete" class="btn btn-outline-danger"></a></td>
             </tr>
-
-            {{type_obj}}
-
+            
         </tbody>
     </table>
+    <a href="{% url 'details' centre.centre_ID %}"><input type="submit" value="GO TO DETAILS" style="margin-left: 20%; margin-top: 5%;" class="btn btn-outline-secondary"></a>
     {%endif%}
 
     {% if client %}
@@ -95,7 +94,7 @@
                 <td align="center"> <a href="{% url 'delete' client.client_ID 'client'%}"><input type="submit" value="Delete" class="btn btn-outline-danger"></a></td>
             </tr>
 
-            {{type_obj}}
+            
 
         </tbody>
     </table>
@@ -127,7 +126,6 @@
                 <td align="center"> <a href="{% url 'delete' fournisseur.fournisseur_ID 'fournisseur'%}"><input type="submit" value="Delete" class="btn btn-outline-danger"></a></td>
             </tr>
 
-            {{type_obj}}
 
         </tbody>
     </table>
@@ -140,8 +138,8 @@
 
                 <th align="center">Code</th>
                 <th align="center">Name</th>
-                <th align="center">Tel</th>
                 <th align="center">ADR</th>
+                <th align="center">TEL</th>
                 <th align="center"> SALAIRE </th>
                 <th align="center"> Options </th>
                 <th align="center"> Options </th>
@@ -159,10 +157,10 @@
                 <td align="center"> <a href="{% url 'delete' team.employer_CODE 'team'%}"><input type="submit" value="Delete" class="btn btn-outline-danger"></a></td>
             </tr>
 
-            {{type_obj}}
 
         </tbody>
     </table>
+
     {%endif%}
 
     {% if matiere_premiere %}
@@ -189,7 +187,6 @@
                 <td align="center"> <a href="{% url 'delete' matiere_premiere.matiere_ID 'matiere_premiere'%}"><input type="submit" value="Delete" class="btn btn-outline-danger"></a></td>
             </tr>
 
-            {{type_obj}}
 
         </tbody>
     </table>
