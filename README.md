@@ -16,3 +16,5 @@ Template achat_confirmation-> sert à fournir le front utilisé dans la tâche d
 Template search -> sert à fournir le front utilisé dans la tâche d'affichage du résultat de recherche envoyer par index ou home et ce résultat est calculé par VIEW search 
 Template select -> sert à fournir l'affichage de résultat d'un sélect d'un objet dans index et affiche les informations de l'objet et donne la main à modifier ces informations ou supprimer l'objet par des Views 
 Template update-> sert à fournir le front utilisé dans la tâche update i.e afficher le form correspondant à cet objet pour que l'utilisateur peut modifier des informations 
+Template details -> sert à fournir le front utilisé dans la tâche de donner le détail sur les centres, ce Template te donne la main à consulter pv du centre e consulter les employés du centre 
+Template details_team-> sert à fournir le front utilisé dans la tâche de donner des informations sur les employés du centre et donner la possibilité de saisir si employé était présent ou pas et ajouter une demande d'emprunt par un employé 
