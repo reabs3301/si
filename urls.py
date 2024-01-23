@@ -16,6 +16,8 @@ urlpatterns = [
     path('select_team/<int:id>',views.select_team , name = 'select_team'),
     path('pointage/<int:id>',views.pointage , name = 'pointage'),
     path('emprunt/<int:id>',views.emprunt , name = 'emprunt'),
-    path('produits_affichage',views.afficher_produit , name = 'produits_affichage'),
-    path('produits_profit/<int:id>',views.profits , name = 'produits_profit'),
+    path('produits_affichage/<int:id>',views.afficher_produit , name = 'produits_affichage'),
+    path('produits_profit/<int:id>/<int:id2>',views.profits , name = 'produits_profit'),
+    path('dash_board/<int:id>',views.dash_board , name = 'dash_board'),
+    path('dash_board2/<int:id>',views.dash_board2 , name = 'dash_board2'),
 ]
