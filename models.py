@@ -8,6 +8,7 @@ class produit(models.Model) :
     prod_NAME = models.CharField(max_length = 30)
     price = models.FloatField()
     produced_at = models.DateTimeField(auto_now=True)
+    prix_transfert = models.FloatField(default = 0)
 
 class main_store(models.Model) :
     main_store_ID = models.AutoField(primary_key = True)
@@ -105,8 +106,10 @@ class vente(models.Model):
     prix = models.FloatField()
     payement_faciliter = models.BooleanField()
     rest_total = models.FloatField(default = 0.0)
+    saled_at =models.ForeignKey(centre_pv ,on_delete=models.CASCADE , default =  '')
 
 class emprunt(models.Model):
     employe = models.ForeignKey(team, on_delete=models.CASCADE)
-    date_emprunt = models.DateField()
+    date_emprunt = models.DateField(auto_now = True)
     somme = models.FloatField()
+    
