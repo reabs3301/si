@@ -30,6 +30,14 @@ def afficher_table(request) :
     return render(request,"index.html",types)
 
 
+def afficher_produit(request) :
+    produits = produit.objects.all()
+
+    types={"produit":produits}
+
+    return render(request,"select_produits.html",types)
+
+
 def select(request , id , type) :
    
     types = {}
@@ -433,3 +441,24 @@ def emprunt(request , id):
     else:
         form = empruntform()
         return render(request, 'emprunt.html', {'employe': employe, 'form': form })
+    
+
+def profits(request,id):
+
+    centre_sale = vente.objects.filter(produit__prod_ID = id)
+    
+    benefice = []
+    for saled in centre_sale:
+        benefice_vente = saled.prix - saled.produit.prix_transfert
+        benefice.append(benefice_vente)
+
+
+    length = len(benefice)
+
+    sum = 0 
+    for b in benefice :
+        sum += b
+
+    profits = sum / length    
+    message = f'le taux de benifice pour produit est :'
+    return render(request,'profits.html',{'benefice':profits , 'message':message , 'len':length})
