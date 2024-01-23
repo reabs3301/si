@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import  get_object_or_404, redirect, render
 from .models import centre_pv, fournisseur, produit, client, pvs, team, matiere_premiere , vente
 from .forms import  PointageForm, centerform, clientform, empruntform, fournisseurform, matiereform, productform, pvform, teamform , pvs, venteform
-
-
+import matplotlib.pyplot as plt
+import base64
+from io import BytesIO
 
 # Create your views here.
  
@@ -463,6 +464,62 @@ def profits(request,id,id2):
         message = ' no sales '
         profits = 0
     else:
-        profits = sum    
+        profits = sum     
         message = f'le taux de benifice pour produit est :'
     return render(request,'profits.html',{'benefice':profits , 'message':message , 'len':length})
+
+
+def dash_board(request, id):
+    ventes = vente.objects.filter(saled_at__centre_ID=id)
+
+    # Calculate total sales for each product
+    product_sales = {}
+    for ventee in ventes:
+        product_name = ventee.produit.prod_NAME
+        product_sales[product_name] = product_sales.get(product_name, 0) + ventee.prix
+
+    produits = list(product_sales.keys())
+    vente_percentages = list(product_sales.values())
+
+    total_sales = sum(vente_percentages)
+
+    # Calculate sales percentages
+    vente_percentages = [prix / total_sales * 100 for prix in vente_percentages]
+
+    plt.figure(figsize=(6, 6))
+    plt.pie(vente_percentages, labels=produits, autopct='%1.1f%%')
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base1 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+    return render(request, 'dash.html', {'image_base1': image_base1 , 'id':id})
+
+
+def dash_board2(request, id):
+    ventes = vente.objects.filter(saled_at__centre_ID=id)
+
+    # Calculate total sales for each product
+    product_sales = {}
+    for ventee in ventes:
+        product_name = ventee.client_achter.client_NAME
+        product_sales[product_name] = product_sales.get(product_name, 0) + ventee.prix
+
+    produits = list(product_sales.keys())
+    vente_percentages = list(product_sales.values())
+
+    total_sales = sum(vente_percentages)
+
+    # Calculate sales percentages
+    vente_percentages = [prix / total_sales * 100 for prix in vente_percentages]
+
+    plt.figure(figsize=(6, 6))
+    plt.pie(vente_percentages, labels=produits, autopct='%1.1f%%')
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base2 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+    return render(request, 'dash2.html', {'image_base2': image_base2 , 'id':id})
