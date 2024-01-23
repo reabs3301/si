@@ -463,6 +463,6 @@ def profits(request,id,id2):
         message = ' no sales '
         profits = 0
     else:
-        profits = sum / length    
+        profits = sum    
         message = f'le taux de benifice pour produit est :'
     return render(request,'profits.html',{'benefice':profits , 'message':message , 'len':length})
