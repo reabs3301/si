@@ -20,7 +20,7 @@
       <tbody>
         {% for product in produit %}
         <tr align="center" >
-          <td><a href="{% url 'produits_profit' product.prod_ID %}" style="text-decoration: none;">{{ product.prod_NAME }}</a></td>
+          <td><a href="{% url 'produits_profit' product.prod_ID id%}" style="text-decoration: none;">{{ product.prod_NAME }}</a></td>
         </tr>
         {% endfor %}
       </tbody>
