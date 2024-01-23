@@ -46,11 +46,11 @@
             <h5 class="card-title">espace de pointage</h5>
             <p class="card-text">appuyez sur l'espace pour indiquer la presence de l'employer .</p>
            
-            <a href="{% url 'pointage' id %}"><input type="submit" value="pointage" class="btn btn-outline-secondary"></a>
+            <a href="{% url 'pointage' team.employer_CODE %}"><input type="submit" value="pointage" class="btn btn-outline-secondary"></a>
             
 
             <p class="card-text">appuyez sur l'espace pour indiquer une demande d'emprunt .</p>
-            <a href="{% url 'emprunt' id %}"><input type="submit" value="emprunt" class="btn btn-outline-secondary"></a>
+            <a href="{% url 'emprunt' team.employer_CODE %}"><input type="submit" value="emprunt" class="btn btn-outline-secondary"></a>
             <br>
             <a href="{% url 'list_team' id %}" class="card-link">Return Back</a>
 
