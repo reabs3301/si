@@ -24,6 +24,9 @@
               <a class="nav-link" href="{% url 'list_team' id %}">about team</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{% url 'produits_affichage' id %}">about profits</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'list_produit'%}">go back</a>
             </li>
           </ul>
@@ -37,7 +40,7 @@
               {% for p in pv %}
                 <li><p class="lh-1"></p>{{ p.pv_val }}</p></li>
               {% endfor %}
-              <a class="nav-link" href="{% url 'add_vente'%}">saisire demande d'emprunt</a>
+              <a class="nav-link" href="{% url 'emprunt' id%}">saisire demande d'emprunt</a>
             </div>
            
           </div>
